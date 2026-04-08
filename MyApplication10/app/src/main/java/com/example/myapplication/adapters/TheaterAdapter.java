@@ -1,0 +1,64 @@
+package com.example.myapplication.adapters;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.myapplication.R;
+import com.example.myapplication.models.Theater;
+
+import java.util.List;
+
+public class TheaterAdapter extends RecyclerView.Adapter<TheaterAdapter.TheaterViewHolder> {
+
+    private List<Theater> theaterList;
+    private OnTheaterClickListener listener;
+
+    public interface OnTheaterClickListener {
+        void onTheaterClick(Theater theater);
+    }
+
+    public TheaterAdapter(List<Theater> theaterList, OnTheaterClickListener listener) {
+        this.theaterList = theaterList;
+        this.listener = listener;
+    }
+
+    @NonNull
+    @Override
+    public TheaterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_theater, parent, false);
+        return new TheaterViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull TheaterViewHolder holder, int position) {
+        Theater theater = theaterList.get(position);
+        holder.name.setText(theater.getName());
+        holder.location.setText(theater.getLocation());
+
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onTheaterClick(theater);
+            }
+        });
+    }
+
+    @Override
+    public int getItemCount() {
+        return theaterList.size();
+    }
+
+    public static class TheaterViewHolder extends RecyclerView.ViewHolder {
+        TextView name, location;
+
+        public TheaterViewHolder(@NonNull View itemView) {
+            super(itemView);
+            name = itemView.findViewById(R.id.tvTheaterName);
+            location = itemView.findViewById(R.id.tvTheaterLocation);
+        }
+    }
+}
